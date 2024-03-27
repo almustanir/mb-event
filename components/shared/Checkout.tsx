@@ -4,6 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { IEvent } from '@/lib/database/models/event.model';
 import { Button } from '../ui/button';
 import { checkoutOrder } from '@/lib/actions/order.actions';
+import { redirect } from 'next/navigation';
 
 loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -29,7 +30,11 @@ const Checkout = ({ event, userId }: { event: IEvent, userId: string }) => {
       buyerId: userId
     }
 
-    await checkoutOrder(order);
+    // await checkoutOrder(order);
+    const url = await checkoutOrder(order);
+    if (url) {
+      redirect(url);
+    }
   }
 
   return (
